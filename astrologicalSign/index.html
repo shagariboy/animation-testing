@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scattered Bouncing Circles</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+    cursor: pointer; /* Set cursor to hand icon */
+  }
+
+  .circle {
+    width: 10px; /* 50px / 5 */
+    height: 10px; /* 50px / 5 */
+    border-radius: 50%;
+    position: absolute;
+    animation: scatter 5s linear infinite;
+  }
+
+  .circle.stopped {
+    animation-play-state: paused; /* Pause animation for circles with the 'stopped' class */
+  }
+
+  @keyframes scatter {
+    0% { transform: translate(-5px, -5px); }
+    25% { transform: translate(5px, -5px); }
+    50% { transform: translate(5px, 5px); }
+    75% { transform: translate(-5px, 5px); }
+    100% { transform: translate(-5px, -5px); }
+  }
+
+  .number {
+    color: white;
+    position: absolute;
+    font-size: 300px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<script>
+  function getRandomPosition() {
+    var x = Math.random() * window.innerWidth;
+    var y = Math.random() * window.innerHeight;
+    return [x, y];
+  }
+
+  function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  function createCircle(x, y, direction) {
+    var circle = document.createElement('div');
+    circle.className = 'circle';
+    circle.style.left = x + 'px';
+    circle.style.top = y + 'px';
+    circle.style.backgroundColor = getRandomColor(); // Set random color for circles
+    circle.dataset.direction = direction; // Set data attribute for direction
+
+    document.body.appendChild(circle);
+  }
+
+  // Create 300 circles initially
+  for (var i = 0; i < 300; i++) {
+    var newPos = getRandomPosition();
+    var direction = getRandomDirection();
+    createCircle(newPos[0], newPos[1], direction);
+  }
+
+  // Function to generate a random direction
+  function getRandomDirection() {
+    var directions = ['up', 'down', 'left', 'right'];
+    return directions[Math.floor(Math.random() * directions.length)];
+  }
+
+  // Function to move the circles randomly
+  function moveCircles() {
+    var circles = document.getElementsByClassName('circle');
+    for (var i = 0; i < circles.length; i++) {
+      var circle = circles[i];
+      var direction = circle.dataset.direction;
+      var x = parseFloat(circle.style.left);
+      var y = parseFloat(circle.style.top);
+      var newX = x;
+      var newY = y;
+
+      switch (direction) {
+        case 'up':
+          newY = y - 1;
+          break;
+        case 'down':
+          newY = y + 1;
+          break;
+        case 'left':
+          newX = x - 1;
+          break;
+        case 'right':
+          newX = x + 1;
+          break;
+      }
+
+      circle.style.left = newX + 'px';
+      circle.style.top = newY + 'px';
+    }
+  }
+
+  // Call moveCircles every 50 milliseconds initially
+  var moveCirclesInterval = setInterval(moveCircles, 50);
+
+  // Function to form "404"
+  function form404() {
+    // Clear existing circles
+    var circles = document.getElementsByClassName('circle');
+    while(circles.length > 0) {
+      circles[0].parentNode.removeChild(circles[0]);
+    }
+    
+
+    // Create circles to form "error"
+    createLetterE();
+    createLetterR1();
+    createLetterR2();
+    createLetterO1();
+    createLetterR3();
+    // Create circles to form "404"
+    createNumber4();
+    createNumber0();
+    createNumber5();
+
+    // Add 'stopped' class to circles forming "404" to pause their animation
+    var forming404 = document.querySelectorAll('.number .circle');
+    forming404.forEach(function(circle) {
+      circle.classList.add('stopped');
+    });
+
+    // After 30 seconds, remove 'stopped' class from circles forming "404" to resume their animation
+    setTimeout(function() {
+      forming404.forEach(function(circle) {
+        circle.classList.remove('stopped');
+      });
+      // Change the interval to 500 milliseconds
+      clearInterval(moveCirclesInterval);
+      moveCirclesInterval = setInterval(moveCircles, 500);
+    }, 30000);
+  }
+
+  // Function to create the letter E
+  function createLetterE() {
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 130, 'up');
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 110, 'up');
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 100, 'left');
+    createCircle(window.innerWidth/2 - 150, window.innerHeight/2 - 90, 'right');
+    createCircle(window.innerWidth/2 - 140, window.innerHeight/2 - 90, 'down');
+    createCircle(window.innerWidth/2 - 130, window.innerHeight/2 - 90, 'up');
+    createCircle(window.innerWidth/2 - 120, window.innerHeight/2 - 90, 'left');
+    createCircle(window.innerWidth/2 - 140, window.innerHeight/2 - 120, 'up');
+    createCircle(window.innerWidth/2 - 130, window.innerHeight/2 - 120, 'right');
+    createCircle(window.innerWidth/2 - 120, window.innerHeight/2 - 120, 'up');
+    createCircle(window.innerWidth/2 - 140, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 130, window.innerHeight/2 - 150, 'right');
+    createCircle(window.innerWidth/2 - 120, window.innerHeight/2 - 150, 'up');
+    
+  }
+
+  // Function to create the first letter R
+  function createLetterR1() {
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 130, 'up');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 110, 'up');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 100, 'left');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 90, 'right');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 70, window.innerHeight/2 - 150, 'right');
+    createCircle(window.innerWidth/2 - 70, window.innerHeight/2 - 120, 'up');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 - 110, 'down');
+    createCircle(window.innerWidth/2 - 70, window.innerHeight/2 - 100, 'left');
+    createCircle(window.innerWidth/2 - 60, window.innerHeight/2 - 90, 'down');
+    createCircle(window.innerWidth/2 - 60, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 60, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 - 60, window.innerHeight/2 - 130, 'right');
+  }
+
+  // Function to create the second letter R
+  function createLetterR2() {
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 130, 'up');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 110, 'up');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 100, 'left');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 90, 'right');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 - 10, window.innerHeight/2 - 120, 'right');
+    createCircle(window.innerWidth/2 - 10, window.innerHeight/2 - 150, 'up');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 - 110, 'down');
+    createCircle(window.innerWidth/2 - 10, window.innerHeight/2 - 100, 'left');
+    createCircle(window.innerWidth/2, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2, window.innerHeight/2 - 130, 'right');
+    createCircle(window.innerWidth/2, window.innerHeight/2 - 90, 'right');
+  }
+
+  // Function to create the letter O
+  function createLetterO1() {
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 130, 'up');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 110, 'left');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 100, 'right');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 90, 'up');
+    createCircle(window.innerWidth/2 + 50, window.innerHeight/2 - 90, 'left');
+    createCircle(window.innerWidth/2 + 60, window.innerHeight/2 - 150, 'right');
+    createCircle(window.innerWidth/2 + 60, window.innerHeight/2 - 90, 'up');
+    createCircle(window.innerWidth/2 + 50, window.innerHeight/2 - 150, 'down');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 130, 'up');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 110, 'left');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 100, 'right');
+    createCircle(window.innerWidth/2 + 70, window.innerHeight/2 - 90, 'up');
+  }
+
+  // Function to create the third letter R
+  function createLetterR3() {
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 130, 'up');
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 110, 'left');
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 100, 'right');
+    createCircle(window.innerWidth/2 + 110, window.innerHeight/2 - 90, 'up');
+    createCircle(window.innerWidth/2 + 120, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 + 130, window.innerHeight/2 - 120, 'down');
+    createCircle(window.innerWidth/2 + 130, window.innerHeight/2 - 100, 'up');
+    createCircle(window.innerWidth/2 + 130, window.innerHeight/2 - 150, 'up');
+    createCircle(window.innerWidth/2 + 140, window.innerHeight/2 - 90, 'left');
+    createCircle(window.innerWidth/2 + 120, window.innerHeight/2 - 110, 'down');
+    createCircle(window.innerWidth/2 + 140, window.innerHeight/2 - 150, 'left');
+    createCircle(window.innerWidth/2 + 140, window.innerHeight/2 - 140, 'right');
+    createCircle(window.innerWidth/2 + 140, window.innerHeight/2 - 130, 'up');
+  }
+
+
+  // Function to create the number 4
+  function createNumber4() {
+    // Create circles to form the number 4
+    createCircle(window.innerWidth/2 - 110, window.innerHeight/2 - 15, 'up');
+    createCircle(window.innerWidth/2 - 110, window.innerHeight/2 - 25, 'down');
+    createCircle(window.innerWidth/2 - 110, window.innerHeight/2 - 35, 'left');
+    createCircle(window.innerWidth/2 - 110, window.innerHeight/2 - 45, 'right');
+    createCircle(window.innerWidth/2 - 100, window.innerHeight/2 - 15, 'up');
+    createCircle(window.innerWidth/2 - 90, window.innerHeight/2 - 15, 'down');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 - 15, 'left');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 - 25, 'right');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 - 35, 'up');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 - 45, 'down');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 + 5, 'left');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 + 15, 'right');
+    createCircle(window.innerWidth/2 - 80, window.innerHeight/2 + 25, 'up');
+  }
+
+  // Function to create the number 0
+  function createNumber0() {
+    // Create circles to form the number 0
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 - 15, 'left');
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 - 25, 'right');
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 - 35, 'up');
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 - 45, 'down');
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 + 5, 'left');
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 + 15, 'right');
+    createCircle(window.innerWidth/2 - 50, window.innerHeight/2 + 25, 'up');
+    createCircle(window.innerWidth/2 - 40, window.innerHeight/2 + 25, 'down');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 + 25, 'left');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 + 25, 'right');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 + 15, 'up');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 + 5, 'down');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 - 15, 'left');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 - 25, 'right');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 - 35, 'up');
+    createCircle(window.innerWidth/2 - 20, window.innerHeight/2 - 45, 'down');
+    createCircle(window.innerWidth/2 - 40, window.innerHeight/2 - 45, 'left');
+    createCircle(window.innerWidth/2 - 30, window.innerHeight/2 - 45, 'right');
+  }
+
+  function createNumber5() {
+    // Create circles to form the number 5
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 15, 'up');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 25, 'down');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 35, 'left');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 - 45, 'right');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 + 5, 'up');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 + 15, 'down');
+    createCircle(window.innerWidth/2 + 40, window.innerHeight/2 + 25, 'left');
+    createCircle(window.innerWidth/2 + 20, window.innerHeight/2 - 15, 'right');
+    createCircle(window.innerWidth/2 + 30, window.innerHeight/2 - 15, 'up');
+    createCircle(window.innerWidth/2 + 10, window.innerHeight/2 - 15, 'down');
+    createCircle(window.innerWidth/2 + 10, window.innerHeight/2 - 25, 'left');
+    createCircle(window.innerWidth/2 + 10, window.innerHeight/2 - 35, 'right');
+    createCircle(window.innerWidth/2 + 10, window.innerHeight/2 - 45, 'up');
+  }
+
+  // Call form404 every 30 seconds
+  setInterval(form404, 3000);
+</script>
+</body>
+</html>
